@@ -55,64 +55,70 @@ def main(paths):
     print(f"{'TOTAL':<10}{'':>10}{len(all_amounts):>10}{under:>8}{over:>8}{under/max(over,1):>7.1f}"
           f"{clean_eur/1e6:>9.1f}{magic[24800.0]:>8}{magic[29760.0]:>9}{magic[30000.0]:>7}")
 
-    # ---- Chart: 25k-38.5k window catches both the net (30k) and gross (37.2k) spikes ----
-    LO, HI, W = 25000, 38500, 500
-    nb = (HI - LO) // W
-    bins = Counter()
-    for a in all_amounts:
-        if LO <= a < HI:
-            bins[int((a - LO) // W)] += 1
-    xs = [LO + b * W for b in range(nb)]
-    ys = [bins[b] for b in range(nb)]
-
-    def color(x):
-        if x in (29500, 37000):
-            return "#d62728"          # the two bunching spikes (net / gross)
-        if x == 29000:
-            return "#f5a623"
-        if x == 30000:
-            return "#5b7a99"          # exactly-€30,000 cluster
-        return "#9bb0c1"
-
-    colors = [color(x) for x in xs]
-    n_exact_30k = sum(1 for a in all_amounts if a == 30000.0)
+    # ---- Chart: two panels, one per recording convention (net vs gross) ----
+    W = 500
+    GRAY, RED, DARK = "#b8c4cf", "#d62728", "#1a1a2e"
     n_exact_372 = sum(1 for a in all_amounts if a == 37200.0)
-    ymax = max(ys)
 
-    fig, ax = plt.subplots(figsize=(12.8, 6.75), dpi=160)
-    ax.bar([x + W / 2 for x in xs], ys, width=W - 40, color=colors, zorder=3)
-    ax.axvline(30000, color="#1a1a2e", lw=2, ls="--", zorder=4)
-    ax.axvline(37200, color="#1a1a2e", lw=2, ls=":", zorder=4)
-    ax.annotate("Όριο €30.000\n(προ ΦΠΑ)", xy=(30000, ymax * 0.62),
-                xytext=(30900, ymax * 0.70), fontsize=11.5, fontweight="bold",
-                arrowprops=dict(arrowstyle="->", lw=1.4))
-    ax.annotate("€30.000 + 24% ΦΠΑ\n= €37.200", xy=(37200, ymax * 0.97),
-                xytext=(33300, ymax * 0.90), fontsize=11.5, fontweight="bold",
-                arrowprops=dict(arrowstyle="->", lw=1.4))
-    i_375 = xs.index(37000)
-    ax.annotate(f"{ys[i_375]} αναθέσεις στα €37.000–37.499\n— οι {n_exact_372} ακριβώς €37.200,00",
-                xy=(37250, ys[i_375]), xytext=(31300, ymax * 1.0), fontsize=11.5,
-                color="#d62728", fontweight="bold",
-                arrowprops=dict(arrowstyle="->", color="#d62728", lw=1.5))
-    i_295 = xs.index(29500)
-    ax.annotate(f"{ys[i_295]} αναθέσεις\nστα €29.500–29.999", xy=(29750, ys[i_295]),
-                xytext=(25400, ymax * 0.62), fontsize=11.5, color="#d62728", fontweight="bold",
-                arrowprops=dict(arrowstyle="->", color="#d62728", lw=1.5))
-    i_300 = xs.index(30000)
-    ax.annotate(f"εκ των οποίων {n_exact_30k}\nακριβώς €30.000,00", xy=(30250, ys[i_300]),
-                xytext=(25400, ymax * 0.40), fontsize=10, color="#5b7a99",
-                arrowprops=dict(arrowstyle="->", color="#5b7a99", lw=1.2))
-    ax.set_title("Το ίδιο όριο, δύο φορές: απευθείας αναθέσεις κάτω από τα €30.000 — με και χωρίς ΦΠΑ",
-                 fontsize=15, fontweight="bold", pad=14)
-    ax.set_xlabel("Ποσό ανάθεσης (€)", fontsize=12)
-    ax.set_ylabel("Αριθμός αναθέσεων", fontsize=12)
-    ax.xaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"€{int(v/1000)}k"))
-    ax.spines[["top", "right"]].set_visible(False)
-    ax.grid(axis="y", alpha=0.3, zorder=0)
+    def histo(ax, lo, hi, red_bins, vline):
+        nb = (hi - lo) // W
+        bins = Counter()
+        for a in all_amounts:
+            if lo <= a < hi:
+                bins[int((a - lo) // W)] += 1
+        xs = [lo + b * W for b in range(nb)]
+        ys = [bins[b] for b in range(nb)]
+        colors = [RED if x in red_bins else GRAY for x in xs]
+        ax.bar([x + W / 2 for x in xs], ys, width=W - 50, color=colors, zorder=3)
+        ax.axvline(vline, color=DARK, lw=2.2, ls="--", zorder=4)
+        ax.xaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"€{v/1000:g}k"))
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.grid(axis="y", alpha=0.3, zorder=0)
+        ax.set_ylabel("αναθέσεις", fontsize=11)
+        return xs, ys
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 11), dpi=160)
+
+    # Panel 1: net-recorded amounts bunch under €30,000
+    xs, ys = histo(ax1, 27000, 33000, {29000, 29500}, 30000)
+    top = max(ys)
+    ax1.set_title("1. Όσοι καταχωρούν την ΚΑΘΑΡΗ αξία (χωρίς ΦΠΑ)",
+                  fontsize=13.5, fontweight="bold", loc="left", pad=10)
+    ax1.annotate("όριο €30.000", xy=(30000, top * 0.78), xytext=(30450, top * 0.86),
+                 fontsize=11.5, fontweight="bold",
+                 arrowprops=dict(arrowstyle="->", lw=1.4))
+    ax1.annotate("5× περισσότερες αναθέσεις\nακριβώς κάτω από το όριο",
+                 xy=(29600, ys[xs.index(29500)] * 0.97), xytext=(27200, top * 0.72),
+                 fontsize=11.5, color=RED, fontweight="bold",
+                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.5))
+
+    # Panel 2: gross-recorded amounts bunch under €37,200 (= €30,000 + 24% VAT)
+    xs, ys = histo(ax2, 34000, 40000, {36500, 37000}, 37200)
+    top = max(ys)
+    ax2.set_title("2. Όσοι καταχωρούν την αξία ΜΕ ΦΠΑ — το ίδιο όριο, μεταφρασμένο",
+                  fontsize=13.5, fontweight="bold", loc="left", pad=10)
+    ax2.annotate("€30.000 + 24% ΦΠΑ\n= €37.200", xy=(37200, top * 0.80), xytext=(37650, top * 0.84),
+                 fontsize=11.5, fontweight="bold",
+                 arrowprops=dict(arrowstyle="->", lw=1.4))
+    ax2.annotate(f"927 αναθέσεις λίγο πριν το όριο\n({n_exact_372} ακριβώς €37.200,00)…",
+                 xy=(37250, top * 0.98), xytext=(34200, top * 0.80),
+                 fontsize=11.5, color=RED, fontweight="bold",
+                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.5))
+    ax2.annotate("…και μόλις 13\nαμέσως μετά", xy=(37650, ys[xs.index(37500)] + top * 0.02),
+                 xytext=(38200, top * 0.28), fontsize=11.5, color=DARK, fontweight="bold",
+                 arrowprops=dict(arrowstyle="->", color=DARK, lw=1.4))
+    ax2.set_xlabel("Ποσό ανάθεσης (€)", fontsize=12)
+
+    fig.suptitle("Το όριο των €30.000 εμφανίζεται δύο φορές στα δεδομένα",
+                 fontsize=17, fontweight="bold", x=0.02, ha="left", y=0.985)
+    fig.text(0.02, 0.948, "Απευθείας αναθέσεις δημοσίου: άλλοι φορείς καταχωρούν καθαρή αξία, "
+                          "άλλοι με ΦΠΑ — όλοι σταματούν στο ίδιο όριο.",
+             fontsize=11.5, color="#444")
     months = len(paths)
-    fig.text(0.99, 0.01, f"Πηγή: Διαύγεια (open data API) · {months} μήνες · {len(all_amounts):,} αποφάσεις Δ.1 με ποσό",
+    fig.text(0.98, 0.005, f"Πηγή: Διαύγεια (open data API) · {months} μήνες (Μαρ–Μάι 2026) · "
+                          f"{len(all_amounts):,} αποφάσεις Δ.1 με ποσό",
              ha="right", fontsize=9, color="#666")
-    fig.tight_layout()
+    fig.tight_layout(rect=[0, 0.015, 1, 0.94])
     out = "output/bunching_30k.png"
     import os
     os.makedirs("output", exist_ok=True)
