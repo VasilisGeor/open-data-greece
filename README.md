@@ -28,20 +28,24 @@ No dependencies beyond Python 3 stdlib + matplotlib (for charts).
 
 ### 2026-06 — Το ίδιο όριο, δύο φορές: bunching στο όριο απευθείας ανάθεσης
 
-Period: Mar–May 2026 · 78,852 Δ.1 decisions · 43,773 with structured amounts.
+Period: Jun 2025 – May 2026 (12 months) · 315,614 Δ.1 decisions · 180,392 with
+structured amounts · €1.31B/year in ≤€60k direct awards (measured, not extrapolated).
 
 The €30,000 (pre-VAT) direct-award limit — άρθρο 118 Ν.4412/2016, as replaced
 by άρθρο 50 Ν.4782/2021 — shows up **twice** in the awarded-amount distribution,
 because contracting authorities record amounts inconsistently (net vs gross):
 
-- **Net side:** awards at €29,000–30,000 outnumber €30,001–31,000 by ~5×,
-  stable every month (4.6× / 5.1× / 5.3×). 221 awards at exactly €30,000.00.
-- **Gross side:** 508 awards at exactly **€37,200.00** (= €30,000 + 24% VAT);
-  the €37,000–37,200 band holds 927 awards vs 13 in €37,201–38,000.
-- **Ghost threshold:** 111 awards at exactly €24,800 (= €20,000 + VAT) —
+- **Net side:** awards at €29,000–30,000 outnumber €30,001–31,000 by 4.4×
+  (range 3.3×–6.0×, positive in all 12 months). 816 awards at exactly €30,000.00.
+- **Gross side:** 2,072 awards at exactly **€37,200.00** (= €30,000 + 24% VAT);
+  the €37,000–37,200 band holds 3,577 awards vs 64 in €37,201–38,000 (56× cliff).
+- **Ghost threshold:** 509 awards at exactly €24,800 (= €20,000 + VAT) —
   the *pre-2021* limit, still anchoring behavior 5 years after repeal.
-- **Works limit (€60,000):** same fingerprint — 65 awards at €59–60k vs 9
-  just above; 32 at exactly €74,400 (= €60,000 + VAT).
+- **Works limit (€60,000):** same fingerprint — 331 awards at €59–60k vs 28
+  just above; 121 at exactly €74,400 (= €60,000 + VAT).
+- **Seasonality teaser:** December 2025 is the year's peak month on every
+  metric (35,312 decisions, €180M clean spend, 436 awards in the €29–30k band);
+  January 2026 the trough (13,093). Classic budget-burn — future post.
 
 Chart: `output/bunching_30k.png`
 

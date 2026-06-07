@@ -59,6 +59,9 @@ def main(paths):
     W = 500
     GRAY, RED, DARK = "#b8c4cf", "#d62728", "#1a1a2e"
     n_exact_372 = sum(1 for a in all_amounts if a == 37200.0)
+    ratio_str = f"{under / max(over, 1):.1f}".replace(".", ",")
+    n_band372 = sum(1 for a in all_amounts if 37000 <= a <= 37200)
+    n_after372 = sum(1 for a in all_amounts if 37200 < a <= 38000)
 
     def histo(ax, lo, hi, red_bins, vline):
         nb = (hi - lo) // W
@@ -87,7 +90,7 @@ def main(paths):
     ax1.annotate("όριο €30.000", xy=(30000, top * 0.78), xytext=(30450, top * 0.86),
                  fontsize=11.5, fontweight="bold",
                  arrowprops=dict(arrowstyle="->", lw=1.4))
-    ax1.annotate("5× περισσότερες αναθέσεις\nακριβώς κάτω από το όριο",
+    ax1.annotate(f"{ratio_str}× περισσότερες αναθέσεις\nακριβώς κάτω από το όριο",
                  xy=(29600, ys[xs.index(29500)] * 0.97), xytext=(27200, top * 0.72),
                  fontsize=11.5, color=RED, fontweight="bold",
                  arrowprops=dict(arrowstyle="->", color=RED, lw=1.5))
@@ -100,11 +103,11 @@ def main(paths):
     ax2.annotate("€30.000 + 24% ΦΠΑ\n= €37.200", xy=(37200, top * 0.80), xytext=(37650, top * 0.84),
                  fontsize=11.5, fontweight="bold",
                  arrowprops=dict(arrowstyle="->", lw=1.4))
-    ax2.annotate(f"927 αναθέσεις λίγο πριν το όριο\n({n_exact_372} ακριβώς €37.200,00)…",
+    ax2.annotate(f"{n_band372:,} αναθέσεις λίγο πριν το όριο\n({n_exact_372:,} ακριβώς €37.200,00)…".replace(",", "."),
                  xy=(37250, top * 0.98), xytext=(34200, top * 0.80),
                  fontsize=11.5, color=RED, fontweight="bold",
                  arrowprops=dict(arrowstyle="->", color=RED, lw=1.5))
-    ax2.annotate("…και μόλις 13\nαμέσως μετά", xy=(37650, ys[xs.index(37500)] + top * 0.02),
+    ax2.annotate(f"…και μόλις {n_after372}\nαμέσως μετά", xy=(37650, ys[xs.index(37500)] + top * 0.02),
                  xytext=(38200, top * 0.28), fontsize=11.5, color=DARK, fontweight="bold",
                  arrowprops=dict(arrowstyle="->", color=DARK, lw=1.4))
     ax2.set_xlabel("Ποσό ανάθεσης (€)", fontsize=12)
@@ -115,7 +118,7 @@ def main(paths):
                           "άλλοι με ΦΠΑ — όλοι σταματούν στο ίδιο όριο.",
              fontsize=11.5, color="#444")
     months = len(paths)
-    fig.text(0.98, 0.005, f"Πηγή: Διαύγεια (open data API) · {months} μήνες (Μαρ–Μάι 2026) · "
+    fig.text(0.98, 0.005, f"Πηγή: Διαύγεια (open data API) · {months} μήνες (Ιούν 2025 – Μάι 2026) · "
                           f"{len(all_amounts):,} αποφάσεις Δ.1 με ποσό",
              ha="right", fontsize=9, color="#666")
     fig.tight_layout(rect=[0, 0.015, 1, 0.94])
