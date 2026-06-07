@@ -4,6 +4,7 @@
 Usage: python3 bunching.py data/raw/d1_2026-03.jsonl data/raw/d1_2026-04.jsonl data/raw/d1_2026-05.jsonl
 """
 import json
+import math
 import sys
 from collections import Counter
 
@@ -63,16 +64,16 @@ def main(paths):
     n_band372 = sum(1 for a in all_amounts if 37000 <= a <= 37200)
     n_after372 = sum(1 for a in all_amounts if 37200 < a <= 38000)
 
-    def histo(ax, lo, hi, red_bins, vline):
-        nb = (hi - lo) // W
+    def histo(ax, lo, hi, w, red_bins, vline):
+        nb = (hi - lo) // w
         bins = Counter()
         for a in all_amounts:
-            if lo <= a < hi:
-                bins[int((a - lo) // W)] += 1
-        xs = [lo + b * W for b in range(nb)]
+            if lo < a <= hi:                      # right-inclusive: (lo, lo+w]
+                bins[math.ceil((a - lo) / w) - 1] += 1
+        xs = [lo + b * w for b in range(nb)]
         ys = [bins[b] for b in range(nb)]
         colors = [RED if x in red_bins else GRAY for x in xs]
-        ax.bar([x + W / 2 for x in xs], ys, width=W - 50, color=colors, zorder=3)
+        ax.bar([x + w / 2 for x in xs], ys, width=w - 50, color=colors, zorder=3)
         ax.axvline(vline, color=DARK, lw=2.2, ls="--", zorder=4)
         ax.xaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"€{v/1000:g}k"))
         ax.spines[["top", "right"]].set_visible(False)
@@ -83,7 +84,7 @@ def main(paths):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 11), dpi=160)
 
     # Panel 1: net-recorded amounts bunch under €30,000
-    xs, ys = histo(ax1, 27000, 33000, {29000, 29500}, 30000)
+    xs, ys = histo(ax1, 27000, 33000, 500, {29000, 29500}, 30000)
     top = max(ys)
     ax1.set_title("1. Όσοι καταχωρούν την ΚΑΘΑΡΗ αξία (χωρίς ΦΠΑ)",
                   fontsize=13.5, fontweight="bold", loc="left", pad=10)
@@ -96,18 +97,19 @@ def main(paths):
                  arrowprops=dict(arrowstyle="->", color=RED, lw=1.5))
 
     # Panel 2: gross-recorded amounts bunch under €37,200 (= €30,000 + 24% VAT)
-    xs, ys = histo(ax2, 34000, 40000, {36500, 37000}, 37200)
+    xs, ys = histo(ax2, 34000, 40000, 400, {36400, 36800}, 37200)
     top = max(ys)
     ax2.set_title("2. Όσοι καταχωρούν την αξία ΜΕ ΦΠΑ — το ίδιο όριο, μεταφρασμένο",
                   fontsize=13.5, fontweight="bold", loc="left", pad=10)
     ax2.annotate("€30.000 + 24% ΦΠΑ\n= €37.200", xy=(37200, top * 0.80), xytext=(37650, top * 0.84),
                  fontsize=11.5, fontweight="bold",
                  arrowprops=dict(arrowstyle="->", lw=1.4))
-    ax2.annotate(f"{n_band372:,} αναθέσεις λίγο πριν το όριο\n({n_exact_372:,} ακριβώς €37.200,00)…".replace(",", "."),
-                 xy=(37250, top * 0.98), xytext=(34200, top * 0.80),
+    e372 = f"{n_exact_372:,}".replace(",", ".")
+    ax2.annotate(f"{e372} αναθέσεις ακριβώς\n€37.200,00 (= το όριο με ΦΠΑ)…",
+                 xy=(37000, top * 0.98), xytext=(34200, top * 0.80),
                  fontsize=11.5, color=RED, fontweight="bold",
                  arrowprops=dict(arrowstyle="->", color=RED, lw=1.5))
-    ax2.annotate(f"…και μόλις {n_after372}\nαμέσως μετά", xy=(37650, ys[xs.index(37500)] + top * 0.02),
+    ax2.annotate(f"…και μόλις {n_after372}\nαμέσως μετά", xy=(37800, top * 0.04),
                  xytext=(38200, top * 0.28), fontsize=11.5, color=DARK, fontweight="bold",
                  arrowprops=dict(arrowstyle="->", color=DARK, lw=1.4))
     ax2.set_xlabel("Ποσό ανάθεσης (€)", fontsize=12)
@@ -119,7 +121,7 @@ def main(paths):
              fontsize=11.5, color="#444")
     months = len(paths)
     fig.text(0.98, 0.005, f"Πηγή: Διαύγεια (open data API) · {months} μήνες (Ιούν 2025 – Μάι 2026) · "
-                          f"{len(all_amounts):,} αποφάσεις Δ.1 με ποσό",
+                          f"{len(all_amounts):,}".replace(",", ".") + " αποφάσεις Δ.1 με ποσό",
              ha="right", fontsize=9, color="#666")
     fig.tight_layout(rect=[0, 0.015, 1, 0.94])
     out = "output/bunching_30k.png"

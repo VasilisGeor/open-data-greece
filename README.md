@@ -38,7 +38,7 @@ because contracting authorities record amounts inconsistently (net vs gross):
 - **Net side:** awards at €29,000–30,000 outnumber €30,001–31,000 by 4.4×
   (range 3.3×–6.0×, positive in all 12 months). 816 awards at exactly €30,000.00.
 - **Gross side:** 2,072 awards at exactly **€37,200.00** (= €30,000 + 24% VAT);
-  the €37,000–37,200 band holds 3,577 awards vs 64 in €37,201–38,000 (56× cliff).
+  the (37,000–37,200] band holds 3,469 awards vs 64 in (37,200–38,000] (54× cliff).
 - **Ghost threshold:** 509 awards at exactly €24,800 (= €20,000 + VAT) —
   the *pre-2021* limit, still anchoring behavior 5 years after repeal.
 - **Works limit (€60,000):** same fingerprint — 331 awards at €59–60k vs 28
