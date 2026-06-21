@@ -58,7 +58,7 @@ def growth():
     ax.set_ylabel("reviews / έτος", fontsize=11, color=MUTED)
     ax.spines[["top", "right"]].set_visible(False)
     ax.grid(axis="y", alpha=0.3, zorder=0)
-    fig.text(0.99, 0.01, "*2025: στοιχεία μέχρι 26/9 (μερικό έτος) · Πηγή: InsideAirbnb · 874.286 reviews",
+    fig.text(0.99, 0.01, "*2025: μέχρι 26/9 (μερικό έτος) · Πηγή: InsideAirbnb, snapshot Σεπ 2025 · 874.286 reviews",
              ha="right", fontsize=9, color=MUTED)
     fig.patch.set_facecolor(PAPER); ax.set_facecolor(PAPER)
     fig.tight_layout(rect=[0, 0.02, 1, 0.96])
