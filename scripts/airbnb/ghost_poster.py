@@ -100,16 +100,16 @@ body{{background:{PAPER};font-family:-apple-system,"Helvetica Neue",Arial,sans-s
 Ανάλυση: Vasilis Georgakas · github.com/VasilisGeor/open-data-greece</div>
 </body></html>"""
 
-    os.makedirs("output", exist_ok=True)
-    hp = "output/airbnb_ghost_poster.html"
+    os.makedirs("output/airbnb", exist_ok=True)
+    hp = "output/airbnb/ghost_poster.html"
     open(hp, "w", encoding="utf-8").write(html)
-    png = os.path.abspath("output/airbnb_ghost_poster.png")
+    png = os.path.abspath("output/airbnb/ghost_poster.png")
     subprocess.run([CHROME, "--headless=new", f"--screenshot={png}",
                     "--window-size=1080,1350", "--force-device-scale-factor=2",
                     "--hide-scrollbars", f"file://{os.path.abspath(hp)}"],
                    check=True, capture_output=True)
     print(f"top5%={top5_pct}% ({n_top5} ops) · max_op={max_op} · max_cluster={max_cluster}")
-    print("-> output/airbnb_ghost_poster.png")
+    print("-> output/airbnb/ghost_poster.png")
 
 
 if __name__ == "__main__":

@@ -6,20 +6,29 @@ I dig through Greek open datasets and publish data-driven findings.
 The code lives here so every finding is fully reproducible — same API,
 same scripts, same numbers.
 
+Each analysis is self-contained in its own folder:
+
+```
+scripts/<analysis>/   code        ·   output/<analysis>/   charts
+data/raw/<analysis>/  raw data (gitignored)   ·   drafts/   post drafts (gitignored)
+```
+
+Current analyses: `diavgeia/` (public procurement), `airbnb/` (short-term rentals).
+
 ## Διαύγεια — απευθείας αναθέσεις
 
 Data source: [Diavgeia Open Data API](https://diavgeia.gov.gr/opendata) (no auth required).
 
-- `scripts/fetch.py` — paginated fetcher for any decision type / date range → JSONL
-- `scripts/analyze.py` — first-pass stats: totals, coverage, categories, top organizations
-- `scripts/bunching.py` — threshold-bunching analysis around the €30.000 direct-award limit + chart
+- `scripts/diavgeia/fetch.py` — paginated fetcher for any decision type / date range → JSONL
+- `scripts/diavgeia/analyze.py` — first-pass stats: totals, coverage, categories, top organizations
+- `scripts/diavgeia/bunching.py` — threshold-bunching analysis around the €30.000 direct-award limit + chart
 
 ### Usage
 
 ```bash
-python3 scripts/fetch.py --type Δ.1 --from 2026-05-01 --to 2026-05-31 --out data/raw/d1_2026-05.jsonl
-python3 scripts/analyze.py data/raw/d1_2026-05.jsonl
-python3 scripts/bunching.py data/raw/d1_2026-*.jsonl
+python3 scripts/diavgeia/fetch.py --type Δ.1 --from 2026-05-01 --to 2026-05-31 --out data/raw/diavgeia/d1_2026-05.jsonl
+python3 scripts/diavgeia/analyze.py data/raw/diavgeia/d1_2026-05.jsonl
+python3 scripts/diavgeia/bunching.py data/raw/diavgeia/d1_2026-*.jsonl
 ```
 
 No dependencies beyond Python 3 stdlib + matplotlib (for charts).
@@ -28,11 +37,11 @@ No dependencies beyond Python 3 stdlib + matplotlib (for charts).
 
 Data source: [InsideAirbnb](https://insideairbnb.com/get-the-data/) (Sep 2025 snapshots, public).
 
-- `scripts/airbnb_explore.py` — per-area stats (room type, host concentration, availability, price)
-- `scripts/airbnb_ghost_poster.py` — operator-concentration poster ("ghost hotels")
-- `scripts/airbnb_charts.py` — availability (Athens vs islands) + Athens density map
-- `scripts/airbnb_charts2.py` — review-growth timeline + price geography
-- `scripts/airbnb_revenue_chart.py` — honest revenue range + concentration
+- `scripts/airbnb/explore.py` — per-area stats (room type, host concentration, availability, price)
+- `scripts/airbnb/ghost_poster.py` — operator-concentration poster ("ghost hotels")
+- `scripts/airbnb/charts.py` — availability (Athens vs islands) + Athens density map
+- `scripts/airbnb/charts2.py` — review-growth timeline + price geography
+- `scripts/airbnb/revenue_chart.py` — honest revenue range + concentration
 
 Prices are recorded with a `$` sign by InsideAirbnb but are **EUR** for Greek listings.
 "Operators" = `host_id` (the managing account), not necessarily the property owner.
@@ -57,8 +66,7 @@ Athens, Sep 2025 · 15,584 listings · 6,196 operators (verified, adversarial fa
 - **Revenue (honest range):** ~€60–90M/year (reviews model; review_rate 0.7→€63M, 0.5→€89M).
   €187M (calendar) is a theoretical ceiling, not an estimate. ~64% of revenue to operators with 3+ listings.
 
-Charts: `output/airbnb_ghost_poster.png`, `airbnb_availability.png`, `airbnb_density_athens.png`,
-`airbnb_growth.png`, `airbnb_prices.png`, `airbnb_revenue.png`.
+Charts: `output/airbnb/` (ghost_poster, availability, density_athens, growth, prices, revenue .png).
 
 **Data-quality notes:** ~92% of Athens listings are entire homes; `availability_365` mixes
 booked + host-blocked nights (a "free/blocked" signal, not occupancy); reviews are a
@@ -88,7 +96,7 @@ because contracting authorities record amounts inconsistently (net vs gross):
   metric (35,312 decisions, €180M clean spend, 436 awards in the €29–30k band);
   January 2026 the trough (13,093). Classic budget-burn — future post.
 
-Chart: `output/bunching_30k.png`
+Chart: `output/diavgeia/bunching_30k.png`
 
 **Data-quality notes:** ~57% of Δ.1 decisions carry a machine-readable amount;
 large tender-procedure documents are routinely misfiled as Δ.1 (naive totals

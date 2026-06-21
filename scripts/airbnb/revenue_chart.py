@@ -3,7 +3,7 @@
 Verified model outputs (workflow 2026-06-21): reviews-model €63M (review_rate 0.7)
 → €89M (0.5), LOS~2.2; calendar-ceiling €187M (not an estimate); ~64% of revenue
 to operators with 3+ listings.
-Usage: python3 scripts/airbnb_revenue_chart.py → output/airbnb_revenue.png
+Usage: python3 scripts/airbnb_revenue_chart.py → output/airbnb/revenue.png
 """
 import os
 import matplotlib
@@ -60,6 +60,6 @@ for ax in (a1, a2):
     ax.set_facecolor(PAPER)
 fig.patch.set_facecolor(PAPER)
 fig.tight_layout(rect=[0, 0.03, 1, 0.94])
-os.makedirs("output", exist_ok=True)
-fig.savefig("output/airbnb_revenue.png", facecolor=PAPER, bbox_inches="tight")
-print("-> output/airbnb_revenue.png")
+os.makedirs("output/airbnb", exist_ok=True)
+fig.savefig("output/airbnb/revenue.png", facecolor=PAPER, bbox_inches="tight")
+print("-> output/airbnb/revenue.png")

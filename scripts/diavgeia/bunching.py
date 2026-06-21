@@ -124,9 +124,9 @@ def main(paths):
                           f"{len(all_amounts):,}".replace(",", ".") + " αποφάσεις Δ.1 με ποσό",
              ha="right", fontsize=9, color="#666")
     fig.tight_layout(rect=[0, 0.015, 1, 0.94])
-    out = "output/bunching_30k.png"
+    out = "output/diavgeia/bunching_30k.png"
     import os
-    os.makedirs("output", exist_ok=True)
+    os.makedirs("output/diavgeia", exist_ok=True)
     fig.savefig(out, bbox_inches="tight")
     print(f"\nchart -> {out}")
 
