@@ -63,7 +63,7 @@ Cross-analysis tying together Airbnb + rents + Eurostat. No own raw data (cites 
 
 - `housing/scripts/chart.py` — `output/young_persons_bill.png` (rent as % of minimum wage)
 
-**Finding:** central-Athens rent for a 50m² flat (~€11,5/m², Spitogatos SPI Q3 2025 → ~€575/mo) eats **56% of the €1.027 minimum wage** — alongside 56% of 25-34s living with parents and ~1-in-20 Athens dwellings on Airbnb. The structural arithmetic behind why young Greeks stay home.
+**Finding:** central-Athens rent for a 50m² flat (~€11,5/m², Spitogatos SPI Q3 2025 → ~€575/mo) eats **77% of the net minimum wage** (€743/mo take-home; €880 gross ×14) — alongside 56% of 25-34s living with parents and ~1-in-20 Athens dwellings on Airbnb. The structural arithmetic behind why young Greeks stay home.
 
 ## Findings log
 
