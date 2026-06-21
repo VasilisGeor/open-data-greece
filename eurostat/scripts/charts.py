@@ -37,7 +37,7 @@ def bars(ax, label, key, fmt, title, note=""):
 # --- Chart 1: living with parents (the headline) ---
 fig, ax = plt.subplots(figsize=(10, 5.8), dpi=160)
 bars(ax, "lwp", "Νέοι 25-34 που ζουν με γονείς (%)", lambda x: f"{x:.1f}%".replace(".", ","),
-     "Νέοι 25-34 που ζουν ακόμα με τους γονείς τους")
+     "")  # τίτλος μόνο μέσω suptitle — αποφυγή διπλού τίτλου
 fig.suptitle("Η Ελλάδα στην κορυφή της Ευρώπης — για λάθος λόγο", fontsize=16, fontweight="bold", x=0.02, ha="left")
 fig.text(0.02, 0.925, "Ποσοστό 25-34 ετών που μένουν στο πατρικό · Eurostat 2025 (ilc_lvps08)", fontsize=10.5, color="#444")
 fig.text(0.98, 0.02, "Πηγή: Eurostat · ilc_lvps08 · 2025", ha="right", fontsize=9, color=MUTED)
