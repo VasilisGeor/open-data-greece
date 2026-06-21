@@ -3,7 +3,7 @@
 import json, glob, math
 from collections import Counter
 
-files = sorted(glob.glob("/Users/vasilisg/Documents/GitHub/open-data-greece/data/raw/diavgeia/d1_*.jsonl"))
+files = sorted(glob.glob("/Users/vasilisg/Documents/GitHub/open-data-greece/data/raw/d1_*.jsonl"))
 print("files:", [f.split('/')[-1] for f in files])
 
 total_decisions = 0

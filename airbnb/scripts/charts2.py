@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Charts for growth + prices posts.
 Usage: python3 scripts/airbnb_charts2.py
-Outputs: output/airbnb/growth.png, output/airbnb/prices.png
+Outputs: output/growth.png, output/prices.png
 """
 import csv
 import gzip
@@ -24,7 +24,7 @@ def num(s):
 
 def growth():
     yr = Counter()
-    with gzip.open("data/raw/airbnb/athens_reviews.csv.gz", "rt", encoding="utf-8") as f:
+    with gzip.open("data/raw/athens_reviews.csv.gz", "rt", encoding="utf-8") as f:
         for row in csv.DictReader(f):
             d = row.get("date", "")
             if len(d) >= 4 and d[:4].isdigit():
@@ -62,12 +62,12 @@ def growth():
              ha="right", fontsize=9, color=MUTED)
     fig.patch.set_facecolor(PAPER); ax.set_facecolor(PAPER)
     fig.tight_layout(rect=[0, 0.02, 1, 0.96])
-    fig.savefig("output/airbnb/growth.png", facecolor=PAPER, bbox_inches="tight")
-    print(f"growth: 2019={peak2019}, 2024={vals[9]}, 2025*={vals[10]} -> output/airbnb/growth.png")
+    fig.savefig("output/growth.png", facecolor=PAPER, bbox_inches="tight")
+    print(f"growth: 2019={peak2019}, 2024={vals[9]}, 2025*={vals[10]} -> output/growth.png")
 
 
 def prices():
-    with gzip.open("data/raw/airbnb/athens.csv.gz", "rt", encoding="utf-8") as f:
+    with gzip.open("data/raw/athens.csv.gz", "rt", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
     by_nb = defaultdict(list)
     allp = []
@@ -92,7 +92,7 @@ def prices():
     cmed = {}
     for name, fn in cities.items():
         ps = []
-        with gzip.open(f"data/raw/airbnb/{fn}.csv.gz", "rt", encoding="utf-8") as f:
+        with gzip.open(f"data/raw/{fn}.csv.gz", "rt", encoding="utf-8") as f:
             for r in csv.DictReader(f):
                 p = num(r.get("price"))
                 if p and 0 < p < 100000:
@@ -130,11 +130,11 @@ def prices():
         ax.set_facecolor(PAPER)
     fig.patch.set_facecolor(PAPER)
     fig.tight_layout(rect=[0, 0.02, 1, 0.95])
-    fig.savefig("output/airbnb/prices.png", facecolor=PAPER, bbox_inches="tight")
-    print(f"prices: city_med €{city_med:.0f}, cross-city {cmed} -> output/airbnb/prices.png")
+    fig.savefig("output/prices.png", facecolor=PAPER, bbox_inches="tight")
+    print(f"prices: city_med €{city_med:.0f}, cross-city {cmed} -> output/prices.png")
 
 
 if __name__ == "__main__":
-    os.makedirs("output/airbnb", exist_ok=True)
+    os.makedirs("output", exist_ok=True)
     growth()
     prices()

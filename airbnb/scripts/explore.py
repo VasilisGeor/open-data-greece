@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Explore InsideAirbnb detailed listings for Greek areas — find the strongest finding.
 
-Usage: python3 scripts/airbnb_explore.py data/raw/airbnb/athens.csv.gz
+Usage: python3 scripts/airbnb_explore.py data/raw/athens.csv.gz
 """
 import csv
 import gzip

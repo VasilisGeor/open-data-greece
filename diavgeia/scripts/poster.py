@@ -2,7 +2,7 @@
 """Post #1 poster: big-number + cliff histogram, rendered via headless Chrome.
 
 Usage: python3 scripts/poster.py data/raw/d1_*.jsonl
-Output: output/diavgeia/poster_37200.html + output/diavgeia/poster_37200.png (2160x2700, 4:5)
+Output: output/poster_37200.html + output/poster_37200.png (2160x2700, 4:5)
 """
 import glob
 import json
@@ -141,17 +141,17 @@ body {{background:{PAPER};font-family:-apple-system,"Helvetica Neue",Arial,sans-
 Ανάλυση: Vasilis Georgakas · github.com/VasilisGeor/open-data-greece</div>
 </body></html>"""
 
-    os.makedirs("output/diavgeia", exist_ok=True)
-    html_path = "output/diavgeia/poster_37200.html"
+    os.makedirs("output", exist_ok=True)
+    html_path = "output/poster_37200.html"
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(html)
-    png_path = os.path.abspath("output/diavgeia/poster_37200.png")
+    png_path = os.path.abspath("output/poster_37200.png")
     subprocess.run([CHROME, "--headless=new", f"--screenshot={png_path}",
                     "--window-size=1080,1350", "--force-device-scale-factor=2",
                     "--hide-scrollbars", f"file://{os.path.abspath(html_path)}"],
                    check=True, capture_output=True)
-    print(f"poster -> output/diavgeia/poster_37200.png")
+    print(f"poster -> output/poster_37200.png")
 
 
 if __name__ == "__main__":
-    main(sorted(sys.argv[1:]) or sorted(glob.glob("data/raw/diavgeia/d1_*.jsonl")))
+    main(sorted(sys.argv[1:]) or sorted(glob.glob("data/raw/d1_*.jsonl")))

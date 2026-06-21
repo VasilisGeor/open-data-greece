@@ -2,7 +2,7 @@
 """Airbnb charts: (1) Athens-vs-islands availability, (2) Athens density map.
 
 Usage: python3 scripts/airbnb_charts.py
-Outputs: output/airbnb/availability.png, output/airbnb/density_athens.png
+Outputs: output/availability.png, output/density_athens.png
 """
 import csv
 import gzip
@@ -14,7 +14,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 PAPER, INK, RED, GRAY, MUTED = "#F7F4EE", "#1B1B2F", "#D7263D", "#C7CDD4", "#6E6E76"
-RAW = "data/raw/airbnb"
+RAW = "data/raw"
 
 
 def load(name):
@@ -72,9 +72,9 @@ def chart_availability():
         ax.set_facecolor(PAPER)
     fig.patch.set_facecolor(PAPER)
     fig.tight_layout(rect=[0, 0.02, 1, 0.92])
-    os.makedirs("output/airbnb", exist_ok=True)
-    fig.savefig("output/airbnb/availability.png", facecolor=PAPER, bbox_inches="tight")
-    print("-> output/airbnb/availability.png")
+    os.makedirs("output", exist_ok=True)
+    fig.savefig("output/availability.png", facecolor=PAPER, bbox_inches="tight")
+    print("-> output/availability.png")
 
 
 def chart_density():
@@ -118,8 +118,8 @@ def chart_density():
              ha="right", fontsize=9, color=MUTED)
     fig.patch.set_facecolor(PAPER)
     fig.tight_layout(rect=[0, 0.02, 1, 0.91])
-    fig.savefig("output/airbnb/density_athens.png", facecolor=PAPER, bbox_inches="tight")
-    print("-> output/airbnb/density_athens.png")
+    fig.savefig("output/density_athens.png", facecolor=PAPER, bbox_inches="tight")
+    print("-> output/density_athens.png")
 
 
 if __name__ == "__main__":
