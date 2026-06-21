@@ -2,3 +2,6 @@
 **/data/
 **/drafts/
 **/*.html
+
+__pycache__/
+*.pyc
