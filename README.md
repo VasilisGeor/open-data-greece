@@ -48,6 +48,23 @@ Data source: [InsideAirbnb](https://insideairbnb.com/get-the-data/) (Sep 2025 sn
 Prices are recorded with a `$` sign by InsideAirbnb but are **EUR** for Greek listings.
 "Operators" = `host_id` (the managing account), not necessarily the property owner.
 
+## Eurostat — Ελλάδα vs ΕΕ
+
+Data source: [Eurostat API](https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data) (no auth, JSON-stat).
+
+- `eurostat/scripts/fetch_basket.py` — pulls a curated basket of Greece-vs-EU indicators → `data/basket.json`
+- `eurostat/scripts/charts.py` — `output/living_with_parents.png` + `output/scorecard.png`
+
+**Findings (2025-2026):** 25-34 living with parents **EL 56,3% vs EU 30,1%** (DE 13,5%); minimum wage **€1.027** (below Portugal €1.073); GDP per capita PPS **68** (EU=100); youth unemployment **19,1%**; in-work poverty 9,7%.
+
+## Housing — στέγαση & νέοι (synthesis)
+
+Cross-analysis tying together Airbnb + rents + Eurostat. No own raw data (cites the others).
+
+- `housing/scripts/chart.py` — `output/young_persons_bill.png` (rent as % of minimum wage)
+
+**Finding:** central-Athens rent for a 50m² flat (~€11,5/m², Spitogatos SPI Q3 2025 → ~€575/mo) eats **56% of the €1.027 minimum wage** — alongside 56% of 25-34s living with parents and ~1-in-20 Athens dwellings on Airbnb. The structural arithmetic behind why young Greeks stay home.
+
 ## Findings log
 
 ### 2026-06 — Airbnb Αθήνα: όχι «sharing economy», αλλά επαγγελματική αγορά
